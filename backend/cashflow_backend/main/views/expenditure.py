@@ -15,7 +15,7 @@ from ..helpers import category_exists
 from decimal import Decimal
 
 ## importing OCR
-from ..ocr_detect import extract_data
+# from ..ocr_detect import extract_data
 
 @api_view(['GET'])
 def all_expenditures(request):

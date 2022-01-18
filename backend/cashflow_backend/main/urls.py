@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import main, expenditure, reminders, categories, goals, authentication
+from .views import main, expenditure, categories, authentication
 
 ## rest imports
 from rest_framework_simplejwt.views import (
