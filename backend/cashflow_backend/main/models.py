@@ -1,0 +1,72 @@
+from django.db import models
+from django.contrib.auth.models import User
+# Category:
+# - category_name
+# - category_used_count
+# - user
+
+# Expenditure:
+# - expenditure_title
+# - amt
+# - remrks
+# - date
+# - belongs_to_category
+# - user
+
+# ExpenditureReceipt:
+# - img
+# - expenditure_title
+# - user
+
+# Reminder:
+# - reminder_title
+# - reminder_desc
+# - amount
+# - due_date
+# - pic_of_bill(optional)
+# - user
+
+# Goal:
+# - goal_title 
+# - goal_desc 
+# - goal_amount
+# - saved_amount
+# - goal_complete_date
+# - goal_set_on
+# - by_user
+
+class Category(models.Model):
+    category_name = models.CharField(max_length=200)
+    category_used_count = models.IntegerField()
+    by_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.category_name} by {self.by_user.username}"
+
+class Expenditure(models.Model):
+    expenditure_title = models.CharField(max_length=200)
+    expenditure_amount = models.DecimalField(max_digits=7, decimal_places=2)
+    expenditure_remarks = models.TextField(blank=True, null=True)
+    expenditure_date = models.DateField()
+    belongs_to_category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+    by_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.expenditure_title} for {self.by_user.username}"
+
+def get_receipt_filename(instance, filename):
+    username = instance.by_user.username
+
+    return f"ExpenditureReceipts/{username}/{filename}"
+
+class ExpenditureReceipt(models.Model):
+    extracted_data = models.TextField(null=True, blank=True)
+    receipt_pic = models.FileField(upload_to=get_receipt_filename)
+    for_expenditure = models.ForeignKey(Expenditure, on_delete=models.CASCADE, null=True, blank=True)
+    by_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        if self.for_expenditure:
+            return f"receipt for {self.for_expenditure.expenditure_title}"
+        else:
+            return f"receipt for {self.by_user.username}"
