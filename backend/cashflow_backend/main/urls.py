@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import main, expenditure, categories, authentication
+from .views import main, expenditure, categories, authentication, reminders, goals
 
 ## rest imports
 from rest_framework_simplejwt.views import (
@@ -22,4 +22,21 @@ urlpatterns = [
     path("update-expenditure/<int:expenditure_id>", expenditure.update_expenditure, name="update_expenditure"),
     path("detect-expenditure/", expenditure.detect_expenditure, name="detect_expenditure"),
     path("expenditure-heatmap/", expenditure.expenditure_heatmap, name="expenditure_heatmap"),
+
+    # categories
+    path("get-categories/", categories.get_categories, name="get_categories"),
+    path("get-most-used-categories/", categories.get_most_used_categories, name="get_most_used_categories"),
+    path("get-category-count/", categories.get_category_count, name="get_category_count"),
+    path("get-category-by-month/", categories.get_category_by_month, name="get_category_by_month"),
+    
+    # reminders
+    path("get-reminders/", reminders.get_reminders, name="get_reminders"),
+    path("add-reminder/", reminders.add_reminder, name="add_reminder"),
+    path("complete-reminder/<int:reminder_id>/", reminders.complete_reminder, name="complete_reminder"),
+    
+    # goals
+    path("get-goals/", goals.get_goals, name="get_goals"),
+    path("add-goal/", goals.add_goal, name="add_goal"),
+    path("update-goal/<int:goal_id>/", goals.update_goal, name="update_goal"),
+
 ]
